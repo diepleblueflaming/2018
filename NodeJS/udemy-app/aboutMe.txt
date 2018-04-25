@@ -1,0 +1,8 @@
+This folder create at 04/25/2018.
+This folder is an demo app when study node js on udemy.
+Include:
+    1. db is mongodb(mongoose).
+    2. server is nodejs(express.js and server api only).
+    3. Testing app by mocha.
+    4. manage source code by github.
+    5. deploy app to heroku.
