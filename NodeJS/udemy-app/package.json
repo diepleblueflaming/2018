@@ -9,6 +9,7 @@
   "author": "diepledev",
   "license": "ISC",
   "dependencies": {
+    "mocha": "^5.1.1",
     "mongoose": "^5.0.16"
   }
 }
