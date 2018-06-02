@@ -1,0 +1,30 @@
+// declare self invoker function
+var global = this;
+global.myGlobalVar = 'node-engine';
+
+(function foo() {
+    var a = 10;
+    console.log(a);
+})();
+
+/**
+ * first () pair declare an expression function
+ * second () pair execute that function
+ * all variable in foo function cannot accessible out side foo scope
+ */
+
+
+
+// 2 pass argument to self invoker fnc
+(function (student) {
+    var age = 10;
+    console.log(age);
+    console.log(student.age);
+})({age: 20});
+
+
+(function (def) {
+    def(global.myGlobalVar);
+})(function def(global) {
+    console.log(global);
+});
