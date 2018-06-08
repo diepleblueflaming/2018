@@ -5,6 +5,8 @@
  *   Initial version created on: 02/06/2018 - 08:37
  */
 const Todo = require("controllers/Todo");
+const validator = require('middlewares/validator/todo');
+
 module.exports = function (express) {
     // initial an router instance
     const router = express.Router();
@@ -16,6 +18,15 @@ module.exports = function (express) {
     router.get('/:name', Todo.getOne);
 
     // POST Todo
-    router.post('/', Todo.create);
+    router.post('/', validator, Todo.create);
+
+    // UPDATE
+    router.put('/', Todo.update);
+
+    // DELETE by Id
+    router.delete('/:id', Todo.deleteById);
+
+    // DELETE by Title
+    router.delete('/title/:title', Todo.deleteByTitle);
     return router;
 };

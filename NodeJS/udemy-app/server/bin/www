@@ -14,7 +14,6 @@ const http = require('http');
 
 const port = normalizePort(process.env.PORT || '1198');
 app.set('port', port);
-process.env.NODE_ENV = 'production';
 
 /**
  * Create HTTP server.

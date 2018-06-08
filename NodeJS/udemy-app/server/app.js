@@ -19,21 +19,14 @@ app.use(cookieParser());
 require('models/connector');
 // pass app instance to routers
 require('routes/v1/index')(express, app);
-;
-
+// require error-handler
+const errorHandler = require('middlewares/error-handler/common');
+const sendResponse = require('middlewares/common/sendResponse');
+// middleware send response to user
+app.use(sendResponse);
 // catch 404 and forward to error handler
-app.use(function (req, res, next) {
-    const err = new Error('Not Found');
-    err.status = 404;
-    next(err);
-});
-
+app.use(errorHandler.notFound);
 // error handler
-app.use(function (err, req, res, next) {
-    // set locals, only providing error in development
-    let errMsg = req.app.get('env') === 'development' ? err.name + ': ' + err.message : {};
-    res.status(err.status || 500);
-    res.end(errMsg);
-});
+app.use(errorHandler.common);
 
 module.exports = app;

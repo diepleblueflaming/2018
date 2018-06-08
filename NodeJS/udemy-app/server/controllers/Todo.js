@@ -9,8 +9,8 @@ const ToDo = require("models/Todo");
 module.exports = {
     getAll: async function (req, res, next) {
         try {
-            let result = await ToDo.get();
-            res.json(result);
+            res.locals.data = await ToDo.get();
+            next();
         } catch (e) {
             next(e)
         }
@@ -19,20 +19,65 @@ module.exports = {
     getOne: async function (req, res, next) {
         let name = req.params.name;
         try {
-            let r = await ToDo.getByName(name);
-            res.json(r);
+            res.locals.data = await ToDo.getByName(name);
+            next();
         } catch (e) {
-            next(e)
+            next(e);
         }
     },
 
     create: async function (req, res, next) {
         let todo = req.body;
         try {
-            let result = await ToDo.create(todo);
-            res.json(result);
+            res.locals.data =  await ToDo.create(todo);
+            next();
         } catch (e) {
-            next(e)
+            next(e);
+        }
+    },
+
+    /**
+     * update a todo by id
+     * @param req, res, next
+     * @return {Promise.<void>}
+     */
+    update: async function (req, res, next) {
+        let todo = req.body;
+        try {
+            res.locals.data = await ToDo.updateById(todo);
+            next();
+        } catch (e) {
+            next(e);
+        }
+    },
+
+    /**
+     * @description delete toto by id
+     * @param req, res, next
+     * @return {Promise.<void>}
+     */
+    deleteById: async function (req, res, next) {
+        try {
+            let id = req.params.id;
+            res.locals.data = await ToDo.deleteById(id);
+            next();
+        } catch (e) {
+            next(e);
+        }
+    },
+
+    /**
+     * @description delete todo by title
+     * @param req, res, next
+     * @return {Promise.<void>}
+     */
+    deleteByTitle: async function (req, res, next) {
+        try {
+            let title = req.params.title;
+            res.data.locals = await ToDo.deleteByTitle(title);
+            next();
+        } catch (e) {
+            next(e);
         }
     }
 };
