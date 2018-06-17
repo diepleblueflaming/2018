@@ -9,6 +9,8 @@ module.exports = function (req, res, next) {
       // send response to user
       res.status(200);
       res.json(res.locals.data);
+      res.end();
+      return;
   }
   // pass to 404 handler
   next();

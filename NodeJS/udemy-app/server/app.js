@@ -15,6 +15,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
 
+// setting response header
+app.use(require("middlewares/common/configRHeader"));
 // set db global variable to this app instance
 require('models/connector');
 // pass app instance to routers

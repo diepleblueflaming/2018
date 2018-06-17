@@ -6,15 +6,15 @@
  */
 module.exports = {
     common: function (err, req, res, next) {
+        console.log(err);
         // set locals, only providing error in development
         let errMsg = req.app.get('env') === 'development' ? err.name + ': ' + err.message : {};
-        console.log(req.app.get('env'));
         res.status(err.status || 500);
         res.json(errMsg);
     },
 
     notFound: function (req, res, next) {
-        const err = new Error('Not Found');
+        const err = new Error('This request not match any route');
         err.status = 404;
         next(err);
     }

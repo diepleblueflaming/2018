@@ -6,7 +6,13 @@
  */
 
 module.exports = {
-    logObjectPertty: function (obj) {
+    logObjectPretty: function (obj) {
         console.log(JSON.stringify(obj, undefined, 2));
+    },
+    customError: function (msg, status = 200, name = 'Error') {
+        let err = new Error(msg);
+        err.name = name;
+        err.status = status;
+        return err;
     }
 };

@@ -8,7 +8,7 @@ const commonHelper = require('helpers/common');
 const {ObjectId} = require("mongodb");
 const Todo = {
     TodoCollection: function () {
-        return process.db.collection('ToDos');
+        return process.db.collection('todo');
     },
     get: function () {
         return this.TodoCollection().find({}).toArray();

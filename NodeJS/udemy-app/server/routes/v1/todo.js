@@ -6,7 +6,6 @@
  */
 const Todo = require("controllers/Todo");
 const validator = require('middlewares/validator/todo');
-
 module.exports = function (express) {
     // initial an router instance
     const router = express.Router();

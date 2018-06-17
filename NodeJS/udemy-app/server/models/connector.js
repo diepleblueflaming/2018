@@ -7,11 +7,12 @@
 const MongoClient = require('mongodb').MongoClient;
 const CONNECT_URL = 'mongodb://localhost:27017/';
 const connectPromise = MongoClient.connect(CONNECT_URL);
+const dbName = process.env.NODE_ENV === 'development' ? 'udemy-app' : 'udemy-app-test';
 process.db = null;
 connectPromise.then((database) => {
-    process.db = database.db('udemy-app');
+    process.db = database.db(dbName);
     console.log('Connecting to MongoDB successfully !!!');
 }).catch(err => {
-    console.log('Unable to connect to MongoDB');
+    console.log('Unable connect to MongoDB');
     throw err;
 });

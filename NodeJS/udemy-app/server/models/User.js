@@ -6,26 +6,37 @@
  */
 const jwt = require("jsonwebtoken");
 const keyHash = 'jwt-key';
+const bcrypt = require('bcrypt');
+const commonHelper = require("helpers/common");
+const LOGIN_SUCCESS_MSG = 'login successfully !!!!';
+const LOGIN_PASSWORD_INVALID = 'Password is invalid';
+const LOGIN_USER_NOT_FOUND = 'User not found';
+
 module.exports = {
     UserCollection: function () {
-      return process.db.collection('User');
+        return process.db.collection('user');
     },
     login: async function (email, password) {
         let user = await this.UserCollection().findOne({email: email});
         if(!user){
-            throw new Error({});
+            throw commonHelper.customError(LOGIN_USER_NOT_FOUND, 401);
         }
-        let isVerified = await jwt.verify(password, keyHash);
+        let isVerified = await bcrypt.compare(password, user.password);
         if(!isVerified){
-            throw new Error();
+            throw commonHelper.customError(LOGIN_PASSWORD_INVALID, 401);
         }
         return this.updateUserTokens(user);
+    },
+    getAll: function () {
+        return this.UserCollection().find({}).toArray();
     },
     getOneByName: function () {
 
     },
-    create: function (user) {
-        user.password = jwt.sign(user.password, keyHash);
+    create: async function (user) {
+        let salt = await bcrypt.genSalt(10);
+        user.password = await bcrypt.hash(user.password, salt);
+        user.tokens = [];
         return this.UserCollection().insertOne(user);
     },
     updateById: function () {
@@ -41,7 +52,9 @@ module.exports = {
             $set: {tokens: user.tokens}
         },{
           returnOriginal: false
-        }).then(() => {return token});
+        }).then(() => {
+            return {token: token, message: LOGIN_SUCCESS_MSG}
+        });
     },
     deleteById: function () {
 
