@@ -37,12 +37,18 @@ module.exports = function () {
         });
     });
 
-    describe('GET /todo', function () {
-        it('should test number of todo is 5', (done) => {
-            request(ToDoUrl).get('/').set('x-auth', this.parent.parent.suites[0].tokens).expect(200).expect((res) => {
-                expect(res.body.length).toBe(5);
-            }).end((err, res) => {
-                done(err || undefined);
+    describe('DELETE /todo', function () {
+        it('should test delete a todo', (done) => {
+            let todoId = '5b38497d9aa82679fdc59dc8';
+            request(ToDoUrl).delete('/' + todoId).set('x-auth', this.parent.parent.suites[0].tokens).expect(200).end((err, res) => {
+                if (err) {
+                    done(err);
+                }
+                request(ToDoUrl).get('/').set('x-auth', this.parent.parent.suites[0].tokens).expect(200).expect((res) => {
+                    expect(res.body.length).toBe(4);
+                }).end((err, res) => {
+                    done(err || undefined);
+                });
             });
         });
     });

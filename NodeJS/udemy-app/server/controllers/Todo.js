@@ -1,15 +1,17 @@
-"use strict";
+'use strict';
 /**
  *   Project: JS-MGDB
  *   Created By: Dieple Dev
  *   Initial version created on: 02/06/2018 - 10:46
  */
 // require Todo Model
-const ToDo = require("models/Todo");
+const ToDo = require('models/Todo');
+const cache = require('middlewares/cache/');
 module.exports = {
     getAll: async function (req, res, next) {
         try {
             res.locals.data = await ToDo.get();
+            cache.setCache(req.originalUrl, res.locals.data);
             next();
         } catch (e) {
             next(e)
@@ -29,7 +31,7 @@ module.exports = {
     create: async function (req, res, next) {
         let todo = req.body;
         try {
-            res.locals.data =  await ToDo.create(todo);
+            res.locals.data = await ToDo.create(todo);
             next();
         } catch (e) {
             next(e);

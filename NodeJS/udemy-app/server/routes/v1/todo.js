@@ -1,17 +1,18 @@
-"use strict";
+'use strict';
 /**
  *   Project: JS-MGDB
  *   Created By: Dieple Dev
  *   Initial version created on: 02/06/2018 - 08:37
  */
-const Todo = require("controllers/Todo");
+const Todo = require('controllers/Todo');
 const validator = require('middlewares/validator/todo');
+const cache = require('middlewares/cache/');
 module.exports = function (express) {
     // initial an router instance
     const router = express.Router();
 
     // GET get all todo
-    router.get('/', Todo.getAll);
+    router.get('/', cache.middleware, Todo.getAll);
 
     // GET ONE
     router.get('/:name', Todo.getOne);

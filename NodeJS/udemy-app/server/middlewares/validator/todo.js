@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 /**
  *   Project: JS-MGDB
  *   Created By: Dieple Dev

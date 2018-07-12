@@ -11,12 +11,12 @@ const baseUrl = 'http://localhost:1198';
 module.exports = function (parent) {
     it('should test login module', function (done) {
         const loginUrl = `${baseUrl}/user/login`;
-        request(loginUrl).post('/').send({
+        const userInfo = {
             email: 'jane@gmail.com',
             password: '123456'
-        }).expect(200).expect((res) => {
-            const token = res.headers['x-auth'];
-            parent.tokens = token;
+        };
+        request(loginUrl).post('/').send(userInfo).expect(200).expect((res) => {
+            parent.tokens = res.headers['x-auth'];
         }).end((err, res) => {
             done(err || undefined)
         });

@@ -58,7 +58,8 @@ const todos = [
         "priority": 2
     },
     {
-        "_id": ObjectId(),
+        // specify id for this todo to test delete todo
+        '_id': ObjectId('5b38497d9aa82679fdc59dc8'),
         "title": "Learning Angular",
         "priority": 2
     }

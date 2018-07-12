@@ -3,11 +3,13 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "NODE_ENV=testing NODE_PATH=./server  nodemon --inspect ./server/bin/www",
+    "start": "NODE_ENV=development NODE_PATH=./server  nodemon --inspect ./server/bin/www",
     "test": "NODE_PATH=./server-test mocha **/test-app/main.test.js",
-    "test-watch": "nodemon --exec 'npm test'"
+    "test-watch": "nodemon --exec 'npm test'",
+    "eslint": "eslint --fix ./server"
   },
   "dependencies": {
+    "acl": "^0.4.11",
     "bcrypt": "^2.0.1",
     "body-parser": "~1.18.2",
     "cookie-parser": "~1.4.3",
@@ -16,10 +18,12 @@
     "jsonwebtoken": "^8.2.2",
     "mongodb": "^3.0.9",
     "morgan": "~1.9.0",
+    "redis": "^2.8.0",
     "serve-favicon": "~2.4.5",
     "validator": "^10.3.0"
   },
   "devDependencies": {
+    "eslint": "^5.0.1",
     "expect": "^22.4.3",
     "mocha": "^5.1.1",
     "supertest": "^3.1.0"

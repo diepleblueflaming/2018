@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 /**
  *   Project: JS-MGDB
  *   Created By: Dieple Dev
@@ -8,11 +8,12 @@ const MongoClient = require('mongodb').MongoClient;
 const CONNECT_URL = 'mongodb://localhost:27017/';
 const connectPromise = MongoClient.connect(CONNECT_URL);
 const dbName = process.env.NODE_ENV === 'development' ? 'udemy-app' : 'udemy-app-test';
+const commonHelper = require('helpers/common');
+const MESSAGE = require('constant/message/en.json');
 process.db = null;
 connectPromise.then((database) => {
     process.db = database.db(dbName);
-    console.log('Connecting to MongoDB successfully !!!');
+    commonHelper.log(MESSAGE.MONGODB_CONNECT_SUCCESS);
 }).catch(err => {
-    console.log('Unable connect to MongoDB');
-    throw err;
+    commonHelper.log(MESSAGE.MONGODB_CONNECT_FAILED + err);
 });

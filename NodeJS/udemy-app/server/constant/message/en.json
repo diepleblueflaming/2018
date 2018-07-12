@@ -1,0 +1,15 @@
+{
+  "LOGIN_SUCCESS": "login successfully !!!!",
+  "PASSWORD_INVALID": "Password is invalid",
+  "USER_NOT_FOUND": "User not found",
+  "LOGOUT_SUCCESS": "You are logout",
+  "MONGODB_CONNECT_SUCCESS": "Connecting to MongoDB successfully !!!",
+  "MONGODB_CONNECT_FAILED": "Unable connect to MongoDB",
+  "REDIS_CONNECT_SUCCESS": "Connecting to Redis successfully !!!",
+  "REDIS_CONNECT_FAILED": "Unable connect to Redis\n",
+  "TYPE_MSG": "must be",
+  "BLANK_STRING": "must not blank",
+  "REQUIRED_MESSAGE": "is required",
+  "BAD_REQUESTED": "Bad Requested",
+  "UNAUTHORIZED": "Unauthorized"
+}

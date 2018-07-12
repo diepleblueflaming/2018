@@ -4,9 +4,6 @@
  *   Created By: Dieple Dev
  *   Initial version created on: 17/06/2018 - 10:03
  */
-const expect = require('expect');
-const request = require('supertest');
-
 describe('Connection', function () {
     const {users, todos} = require('test-app/seeding-database');
 

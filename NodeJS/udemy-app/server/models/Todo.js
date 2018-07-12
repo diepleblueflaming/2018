@@ -19,8 +19,7 @@ const Todo = {
     create: function (toto) {
         return this.TodoCollection().insertOne(toto);
     },
-    updateById: function (todo) {
-        commonHelper.logObjectPertty(todo);
+    updateById: async function (todo) {
         let id = todo._id;
         delete todo._id;
         return this.TodoCollection().findOneAndUpdate({
@@ -37,7 +36,6 @@ const Todo = {
     },
 
     deleteByTitle: function (title) {
-        debugger;
         return this.TodoCollection().deleteMany({title: title});
     }
 };

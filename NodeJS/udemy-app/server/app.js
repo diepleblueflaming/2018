@@ -16,11 +16,11 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
 
 // setting response header
-app.use(require("middlewares/common/configRHeader"));
+app.use(require('middlewares/common/configHeader'));
 // set db global variable to this app instance
 require('models/connector');
 // pass app instance to routers
-require('routes/v1/index')(express, app);
+require('routes/v1/')(express, app);
 // require error-handler
 const errorHandler = require('middlewares/error-handler/common');
 const sendResponse = require('middlewares/common/sendResponse');
