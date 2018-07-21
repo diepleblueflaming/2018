@@ -5,6 +5,8 @@
  *   Initial version created on: 07/06/2018 - 06:02
  */
 const validate = require('middlewares/validator/validate');
+const STATUS_CODE = require('constant/statusCodes/index.json');
+const MESSAGE = require('constant/message/en.json');
 const User = {
     name: {
         required: true,

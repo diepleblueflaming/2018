@@ -5,8 +5,7 @@
  *   Initial version created on: 10/07/2018 - 16:22
  */
 const redis = require('middlewares/redis/');
-const commonHelper = require('helpers/common');
-const STATUS_CODE = require('constant/status_code/index.json');
+const STATUS_CODE = require('constant/statusCodes/index.json');
 const redisCache = {
     setCache: function (resource, data) {
         redis.set(resource, data);
@@ -25,10 +24,10 @@ const redisCache = {
                 return;
             }
             res.status(STATUS_CODE.OK);
-            res.setHeader('Content-Type', 'application/json')
+            res.setHeader('Content-Type', 'application/json');
             res.send(data);
         } catch (e) {
-            next(commonHelper.customError(e.status, e.message));
+            next(e);
         }
     }
 };

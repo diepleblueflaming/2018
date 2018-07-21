@@ -1,0 +1,7 @@
+1. using str.repeat('character');
+ex: "s".repeat(2) => "ss";
+
+2. Using Set to remove all duplicate item in array.
+
+
+3. remove duplicate in string: str.replace(/(.)\1+/g, '$1');

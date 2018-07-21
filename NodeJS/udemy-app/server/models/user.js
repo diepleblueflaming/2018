@@ -4,34 +4,31 @@
  *   Created By: Dieple Dev
  *   Initial version created on: 07/06/2018 - 05:52
  */
-const jwt = require("jsonwebtoken");
-const keyHash = 'jwt-key';
+const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const commonHelper = require("helpers/common");
 const redis = require('middlewares/redis/');
-const MESSAGE = require('constant/message/en.json');
-const STATUS_CODE = require('constant/status_code/index.json');
+const commonHelper = require('helpers/common');
+const APP_CONSTANT = require('constant/appConstants.json');
+
 module.exports = {
     UserCollection: function () {
         return process.db.collection('user');
     },
 
     login: async function (email, password) {
-        let user = await this.UserCollection().findOne({email: email});
+        let user = await this.UserCollection().findOne({email});
         if(!user){
-            throw commonHelper.customError(MESSAGE.USER_NOT_FOUND, 401);
+            throw commonHelper.triggerError('VALIDATION', 'EMAIL');
         }
         let isVerified = await bcrypt.compare(password, user.password);
         if(!isVerified){
-            throw commonHelper.customError(MESSAGE.PASSWORD_INVALID, 401);
+            throw commonHelper.triggerError('VALIDATION', 'PASSWORD');
         }
         return this.updateUserTokens(user);
     },
 
     logout: function (token) {
-        jwt.verify(token, keyHash);
-        redis.set(`user-logged-${token}`, null);
-        return {message: MESSAGE.LOGOUT_SUCCESS};
+        redis.set(`${APP_CONSTANT['REDIS_USER_LOGIN_PREFIX']}-${token}`, null);
     },
 
     getAll: function () {
@@ -42,22 +39,23 @@ module.exports = {
         return this.UserCollection().findOne({_id: id});
     },
 
-    getByName: function () {
-
+    getByEmail: function (email) {
+        return this.UserCollection().findOne({email});
     },
+
     create: async function (user) {
         let salt = await bcrypt.genSalt(10);
         user.password = await bcrypt.hash(user.password, salt);
         user.tokens = [];
         return this.UserCollection().insertOne(user);
     },
-    updateById: function () {
 
+    updateById: function () {
     },
 
     updateUserTokens: function (user) {
         let access = new Date().getTime();  // as timestamp
-        let token = jwt.sign({_id: user._id}, keyHash, {expiresIn: '3h'});
+        let token = jwt.sign({_id: user._id}, APP_CONSTANT['JWT_PUBLIC_KEY'], {expiresIn: '3h'});
         user.tokens.push({access, token});
         return this.UserCollection().findOneAndUpdate({
             _id: user._id
@@ -66,8 +64,8 @@ module.exports = {
         },{
           returnOriginal: false
         }).then(() => {
-            redis.set(`user-logged-${token}`, user);
-            return {token: token, message: MESSAGE.LOGIN_SUCCESS}
+            redis.set(`${APP_CONSTANT['REDIS_USER_LOGIN_PREFIX']}-${token}`, user);
+            return token;
         });
     },
 
@@ -79,7 +77,7 @@ module.exports = {
             });
     },
 
-    deleteById: function () {
-
+    deleteByEmail: function (email) {
+        return this.UserCollection().deleteMany({email});
     }
 };

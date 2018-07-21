@@ -39,9 +39,9 @@ const accessControlList = {
 
     logPermission: function (userId, role) {
         aclObj.allowedPermissions(userId, role, (err, obj) => {
-            commonHelper.logObjectPretty(obj);
+            commonHelper.logPrettyObject(obj);
         });
-        aclObj.roleUsers(role, (err, res) => commonHelper.logObjectPretty(res));
+        aclObj.roleUsers(role, (err, res) => commonHelper.logPrettyObject(res));
     },
 
     setUserRole: function (userId, role) {

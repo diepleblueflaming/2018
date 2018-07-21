@@ -1,0 +1,7 @@
+{
+  "MONGODB_DB_NAME": "udemy-app",
+  "MONGODB_DB_TEST_NAME": "udemy-app-test",
+  "MONGODB_CONNECT_URL": "mongodb://localhost:27017/",
+  "JWT_PUBLIC_KEY": "jwt-key",
+  "REDIS_USER_LOGIN_PREFIX": "user-token"
+}

@@ -7,11 +7,14 @@
 const redis = require('redis');
 const commonHelper = require('helpers/common');
 const blueBird = require('bluebird');
-const redisClient = redis.createClient();
 const MESSAGE = require('constant/message/en.json');
+const redisClient = redis.createClient();
 
-redisClient.on('connect', () => commonHelper.log(MESSAGE.REDIS_CONNECT_SUCCESS));
-redisClient.on('error', (err) => commonHelper.log(MESSAGE.REDIS_CONNECT_FAILED + err));
+redisClient.on('connect', () => commonHelper.log(MESSAGE['REDIS_CONNECT_SUCCESS']));
+redisClient.on('error', (err) => {
+    commonHelper.log(MESSAGE['REDIS_CONNECT_FAILED'] + err);
+    process.exit(1);
+});
 
 module.exports = {
     set: function (key, value) {

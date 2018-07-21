@@ -5,7 +5,7 @@
  *   Initial version created on: 02/06/2018 - 10:46
  */
 // require Todo Model
-const ToDo = require('models/Todo');
+const ToDo = require('models/todo');
 const cache = require('middlewares/cache/');
 module.exports = {
     getAll: async function (req, res, next) {

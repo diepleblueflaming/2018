@@ -1,6 +1,7 @@
 {
   "LOGIN_SUCCESS": "login successfully !!!!",
   "PASSWORD_INVALID": "Password is invalid",
+  "EMAIL_INVALID": "Email is invalid",
   "USER_NOT_FOUND": "User not found",
   "LOGOUT_SUCCESS": "You are logout",
   "MONGODB_CONNECT_SUCCESS": "Connecting to MongoDB successfully !!!",
@@ -11,5 +12,18 @@
   "BLANK_STRING": "must not blank",
   "REQUIRED_MESSAGE": "is required",
   "BAD_REQUESTED": "Bad Requested",
-  "UNAUTHORIZED": "Unauthorized"
+  "UNAUTHORIZED": "Unauthorized",
+  "USER_NOT_FOUND_TOKEN": "user not found for this token",
+  "AUTHENTICATION_ERROR": "Authentication Failed",
+  "VALIDATION_ERROR": "Validation Failed",
+  "INTERNAL_SERVER_ERROR": "Internal Server Error",
+  "RESOURCE_NOT_FOUND": "Resource Not Found",
+  "SUCCESS": "Successfully",
+  "FAILED": "Failed",
+  "USER_CREATED": "An new user is created !!!",
+  "MISSING_TOKEN": "You must provide a token for authentication",
+  "DATABASE": "Database Error",
+  "COMMON": "Something went wrong",
+  "EXISTED_USER": "This user already exist",
+  "DELETED_USER": "The User is deleted"
 }

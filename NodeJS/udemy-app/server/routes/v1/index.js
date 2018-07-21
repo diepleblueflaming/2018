@@ -5,7 +5,7 @@
  *   Initial version created on: 02/06/2018 - 13:28
  */
 const authenticator = require('middlewares/authentication/');
-const acl = require('middlewares/role-based/');
+const acl = require('middlewares/roleBased/');
 module.exports = function (express, app) {
     const user = require('routes/v1/user')(express);
     app.use('/user', user);
