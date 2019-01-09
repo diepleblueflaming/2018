@@ -1,0 +1,42 @@
+-------------------------
+Wed, 09 Jan 2019 15:25:15 GMT
+GET /weather/Hashimoto 200 1090ms
+{"statusCode":200,"msg":"Successfully","data":{"coord":{"lon":145.77,"lat":-16.92},"weather":[{"id":802,"main":"Clouds","description":"scattered clouds","icon":"03n"}],"base":"stations","main":{"temp":300.15,"pressure":1007,"humidity":74,"temp_min":300.15,"temp_max":300.15},"visibility":10000,"wind":{"speed":3.6,"deg":160},"clouds":{"all":40},"dt":1485790200,"sys":{"type":1,"id":8166,"message":0.2064,"country":"AU","sunrise":1485720272,"sunset":1485766550},"id":2172797,"name":"Cairns","cod":200}}
+-------------------------
+
+-------------------------
+Wed, 09 Jan 2019 15:28:18 GMT
+GET /logout 401 3ms
+{"statusCode":401,"msg":"Unauthorized !"}
+-------------------------
+
+-------------------------
+Wed, 09 Jan 2019 15:28:32 GMT
+GET /logout 200 9ms
+{"statusCode":200,"msg":"Logout successfully"}
+-------------------------
+
+-------------------------
+Wed, 09 Jan 2019 15:28:53 GMT
+GET /logout 401 11ms
+{"statusCode":401,"msg":"Unauthorized !"}
+-------------------------
+
+-------------------------
+Wed, 09 Jan 2019 15:30:12 GMT
+POST /login/ 200 17ms
+{"statusCode":200,"msg":"Login successfully !"}
+-------------------------
+
+-------------------------
+Wed, 09 Jan 2019 15:30:17 GMT
+GET /weather/Hashimoto 200 1803ms
+{"statusCode":200,"msg":"Successfully","data":{"coord":{"lon":145.77,"lat":-16.92},"weather":[{"id":802,"main":"Clouds","description":"scattered clouds","icon":"03n"}],"base":"stations","main":{"temp":300.15,"pressure":1007,"humidity":74,"temp_min":300.15,"temp_max":300.15},"visibility":10000,"wind":{"speed":3.6,"deg":160},"clouds":{"all":40},"dt":1485790200,"sys":{"type":1,"id":8166,"message":0.2064,"country":"AU","sunrise":1485720272,"sunset":1485766550},"id":2172797,"name":"Cairns","cod":200}}
+-------------------------
+
+-------------------------
+Wed, 09 Jan 2019 15:30:20 GMT
+GET /user/ 200 2ms
+{"statusCode":200,"msg":"successfully","data":[{"id":"user-101","email":"lhdiep95@gmail.com","address":"Ha Noi","phone":"012347889549","password":"123456"},{"id":"user-102","email":"diep.lehai@gmail.com","address":"London","phone":"012347889549","password":"123456"}]}
+-------------------------
+

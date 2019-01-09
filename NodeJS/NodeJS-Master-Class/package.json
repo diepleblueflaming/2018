@@ -1,0 +1,19 @@
+{
+  "name": "NodeJS-Master-Class",
+  "version": "1.0.0",
+  "description": "nodejs master class app",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "NODE_ENV=staging nodemon --inspect --exec  babel-node app.js "
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-preset-env": "^1.7.0",
+    "nodemon": "^1.18.6"
+  }
+}
