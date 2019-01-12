@@ -36,6 +36,10 @@ module.exports = {
         COMMON: {
             message: MESSAGE['COMMON']
         },
+	    DATABASE: {
+		    message: MESSAGE['DATABASE']
+	    },
+	    ARGUMENTS: {},
         STATUS_CODE: STATUS_CODE['INTERNAL_SERVER_ERROR'],
         MESSAGE: MESSAGE['INTERNAL_SERVER_ERROR']
     },

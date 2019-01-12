@@ -1,0 +1,33 @@
+[
+  {
+    "roles": [
+      "admin"
+    ],
+    "allows": [
+      {
+        "resources": [
+          "/todo",
+          "/user"
+        ],
+        "permissions": "*"
+      }
+    ]
+  },
+  {
+    "roles": [
+      "customer"
+    ],
+    "allows": [
+      {
+        "resources": "/todo",
+        "permissions": [
+          "put"
+        ]
+      },
+      {
+        "resources": "/user",
+        "permissions": "get"
+      }
+    ]
+  }
+]

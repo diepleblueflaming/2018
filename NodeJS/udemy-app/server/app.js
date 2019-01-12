@@ -4,11 +4,19 @@ const favicon = require('serve-favicon');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
+const dotenv = require('dotenv');
 
 // each request create a new express instance and we store it into app const.
 const app = express();
+
+// load app config
+dotenv.config({
+	path: `./server/config/${process.env.NODE_ENV}/.env`,
+	encoding: 'utf8'
+});
+
 // require errorHandler
-const errorHandler = require('middlewares/errorHandler/');
+const {handleError, handleResourceNotFound} = require('middlewares/errorHandler/');
 const sendResponse = require('middlewares/common/sendResponse');
 
 // uncomment after placing your favicon in /public
@@ -20,16 +28,20 @@ app.use(cookieParser());
 
 // setting response header
 app.all(require('middlewares/common/configHeader'));
-// set db global variable to this app instance
+
+// connect to mongodb
 require('models/connector');
+
 // pass app instance to routers
-require('routes/v1/')(express, app);
+app.use(require('routes/v1/'));
 
 // middleware send response to user
 app.use(sendResponse);
+
 // catch 404 and forward to error handler
-app.use(errorHandler.notFound.bind(errorHandler));
+app.use(handleResourceNotFound);
+
 // error handler
-app.use(errorHandler.common.bind(errorHandler));
+app.use(handleError);
 
 module.exports = app;

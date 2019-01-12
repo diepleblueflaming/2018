@@ -4,36 +4,33 @@
  *   Created By: Dieple Dev
  *   Initial version created on: 09/06/2018 - 08:30
  */
+const APP_CONSTANT = require('constant/appConstants.json');
 const jwt = require('jsonwebtoken');
 const redis = require('middlewares/redis/');
-const acl = require('middlewares/roleBased/');
-const commonHelper = require('helpers/common');
-const APP_CONSTANT = require('constant/appConstants.json');
+const {triggerAPIError} = require('untils/apiError');
 
-const Authenticator = {
-    getUserCacheByToken: async function (token) {
-        let userCache = await redis.get(`${APP_CONSTANT['REDIS_USER_LOGIN_PREFIX']}-${token}`);
-        if (userCache === null || userCache === 'null') {
-            throw commonHelper.triggerError('AUTHENTICATION', 'USER_NOT_FOUND');
-        }
-        return JSON.parse(userCache);
-    },
+module.exports = {authenticate};
 
-    authenticate: async function (req, res, next) {
-        try {
-            let token = req.header('x-auth');
-            if (token === undefined) {
-                throw commonHelper.triggerError('AUTHENTICATION', 'MISSING_TOKEN');
-            }
-            jwt.verify(token, APP_CONSTANT['JWT_PUBLIC_KEY']);
-            let userCache = await Authenticator.getUserCacheByToken(token);
-            res.userLogged = userCache;
-            acl.setUserRole(userCache._id, userCache.role);
-            next();
-        } catch (e) {
-            next(e);
-        }
-    }
-};
+async function getUserCacheByEmail(email) {
+	let userKeyInRedis = `${APP_CONSTANT['REDIS_USER_LOGIN_PREFIX']}${email}`;
+	let userCache = await redis.getUserInfo(userKeyInRedis);
+	if (userCache === null) {
+		throw triggerAPIError('AUTHENTICATION', 'USER_NOT_FOUND');
+	}
+	return userCache;
+}
 
-module.exports = Authenticator;
+async function authenticate(req, res, next) {
+	try {
+		let token = req.header('x-auth');
+		if (token === undefined) {
+			throw triggerAPIError('AUTHENTICATION', 'MISSING_TOKEN');
+		}
+		let userDecoded = jwt.verify(token, APP_CONSTANT['JWT_PUBLIC_KEY']);
+		let userCache = await getUserCacheByEmail(userDecoded.email);
+		req.userLogged = userCache;
+		next();
+	} catch (e) {
+		next(e);
+	}
+}

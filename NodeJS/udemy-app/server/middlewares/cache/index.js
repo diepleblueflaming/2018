@@ -6,9 +6,13 @@
  */
 const redis = require('middlewares/redis/');
 const STATUS_CODE = require('constant/statusCodes/index.json');
+const APP_CONSTANT = require('constant/appConstants.json');
+
 const redisCache = {
-    setCache: function (resource, data) {
-        redis.set(resource, data);
+
+	setCache: function (req, data) {
+		redis.set(req.originalUrl, data);
+		redis.expire(req.originalUrl, APP_CONSTANT['TIME_CACHE']);
     },
 
     getCache: function (resource) {
@@ -25,7 +29,7 @@ const redisCache = {
             }
             res.status(STATUS_CODE.OK);
             res.setHeader('Content-Type', 'application/json');
-            res.send(data);
+	        res.send(data).end();
         } catch (e) {
             next(e);
         }

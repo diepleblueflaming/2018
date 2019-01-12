@@ -4,12 +4,16 @@
  *   Created By: Dieple Dev
  *   Initial version created on: 02/06/2018 - 13:28
  */
-const authenticator = require('middlewares/authentication/');
-const acl = require('middlewares/roleBased/');
-module.exports = function (express, app) {
-    const user = require('routes/v1/user')(express);
-    app.use('/user', user);
+const express = require('express');
+const router = express.Router();
 
-    const todo = require('routes/v1/todo')(express);
-    app.use('/todo', [authenticator.authenticate, acl.middleware()], todo);
-};
+const auth = require('routes/v1/auth');
+router.use('/auth', auth);
+
+const user = require('routes/v1/user');
+router.use('/user', user);
+
+const todo = require('routes/v1/todo');
+router.use('/todo', todo);
+
+exports = module.exports = router;

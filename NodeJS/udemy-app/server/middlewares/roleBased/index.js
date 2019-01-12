@@ -4,52 +4,53 @@
  *   Created By: Dieple Dev
  *   Initial version created on: 09/07/2018 - 05:56
  */
+const APP_CONSTANT = require('constant/appConstants.json');
+const accessControlSpec = require('./accessControl.spec.json');
 const acl = require('acl');
-const redisClient = require('redis').createClient();
 const commonHelper = require('helpers/common');
+const redisClient = require('redis').createClient();
 let aclRedis = new acl.redisBackend(redisClient);
 const aclObj = new acl(aclRedis);
+
 const accessControlList = {
-    /**
-     * @return Promise
-     */
     setRole: function () {
-        return aclObj.allow([
-            {
-                roles: ['admin'],
-                allows: [
-                    {resources: ['/todo', '/user'], permissions: '*'},
-                ]
-            },
-            {
-                roles: ['customer'],
-                allows: [
-                    {resources: '/todo', permissions: ['put']},
-                    {resources: '/user', permissions: 'get'}
-                ]
-            }
-        ]);
+	    return aclObj.allow(accessControlSpec);
     },
 
-    middleware: function () {
-        return aclObj.middleware(1, (req, res) => {
-            return res.userLogged.hasOwnProperty('_id') ? res.userLogged._id : '';
-        });
+	middleware: async function (req, res, next) {
+		try {
+			let userId = req.userLogged._id;
+			userId = userId ? userId.toString() : '';
+			let cb = aclObj.middleware(1, userId);
+			cb(req, res, next);
+		} catch (e) {
+			next(e);
+		}
     },
 
-    logPermission: function (userId, role) {
-        aclObj.allowedPermissions(userId, role, (err, obj) => {
-            commonHelper.logPrettyObject(obj);
-        });
-        aclObj.roleUsers(role, (err, res) => commonHelper.logPrettyObject(res));
+	logPermission: async function (userId, role) {
+		try {
+			let permission = aclObj.allowedPermissions(userId, role);
+			commonHelper.logPrettyObject(permission);
+			let userRole = await aclObj.roleUsers(role);
+			commonHelper.logPrettyObject(userRole);
+		} catch (e) {
+			throw e;
+		}
     },
 
-    setUserRole: function (userId, role) {
+	setUserRole: async function (userId, role) {
         if (typeof role === 'object' && role.length) {
             // do something
         }
+		await this.removeAllUserRole(userId);
         return aclObj.addUserRoles(userId, role);
-    }
+	},
+
+	removeAllUserRole: async function (userId) {
+		let aclUserKey = APP_CONSTANT['ACL_USER_PREFIX'] + userId;
+		await redisClient.del(aclUserKey);
+	}
 };
 accessControlList.setRole();
 module.exports = accessControlList;

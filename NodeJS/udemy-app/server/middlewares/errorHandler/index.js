@@ -4,22 +4,30 @@
  *   Created By: Dieple Dev
  *   Initial version created on: 04/06/2018 - 16:40
  */
-const commonHelper = require('helpers/common');
-module.exports = {
-    common: function (err, req, res, next) {
-        if (!commonHelper.instanceOf(err, 'CustomError')) {
-            err = commonHelper.triggerSystemError(err);
-        }
-        commonHelper.logPrettyObject(err);
-        // set locals, only providing error in development
-        let isDevelopment = ['development', 'testing'].includes(req.app.get('env'));
-        let errObj = isDevelopment ? err : {};
-        res.status(err.status);
-        res.json(errObj).end();
-    },
+const {log, isDevelopment} = require('helpers/common');
+const {convertToAPIError, triggerAPIError} = require('untils/apiError');
 
-    notFound: function (req, res, next) {
-        const err = commonHelper.triggerError('RESOURCE_NOT_FOUND');
-        next(err);
-    }
+module.exports = {
+	handleError,
+	handleResourceNotFound
 };
+
+function handleError(err, req, res, next) {
+	// log error
+	log(err);
+
+	// convert error to standard error if need
+	err = convertToAPIError(err).toObject();
+
+	// set locals, only providing error in development
+	let errObj = isDevelopment() ? err : {};
+
+	// send error
+	res.status(err.status);
+	res.json(errObj).end();
+}
+
+function handleResourceNotFound(req, res, next) {
+	const err = triggerAPIError('RESOURCE_NOT_FOUND');
+	next(err);
+}

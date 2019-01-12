@@ -13,7 +13,7 @@
   "REQUIRED_MESSAGE": "is required",
   "BAD_REQUESTED": "Bad Requested",
   "UNAUTHORIZED": "Unauthorized",
-  "USER_NOT_FOUND_TOKEN": "user not found for this token",
+  "USER_NOT_FOUND_TOKEN": "Your session is expired, please login try again",
   "AUTHENTICATION_ERROR": "Authentication Failed",
   "VALIDATION_ERROR": "Validation Failed",
   "INTERNAL_SERVER_ERROR": "Internal Server Error",
@@ -22,8 +22,10 @@
   "FAILED": "Failed",
   "USER_CREATED": "An new user is created !!!",
   "MISSING_TOKEN": "You must provide a token for authentication",
-  "DATABASE": "Database Error",
+  "DATABASE": "Resource not found or something went wrong from database",
   "COMMON": "Something went wrong",
   "EXISTED_USER": "This user already exist",
-  "DELETED_USER": "The User is deleted"
+  "DELETED_USER": "The User is deleted",
+  "UPDATED_USER": "The User is updated",
+  "ACCESS_PERMISSION": "Access Permission Error"
 }

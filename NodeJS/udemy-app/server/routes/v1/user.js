@@ -3,29 +3,29 @@
  *
  * user router
  */
+const express = require('express');
 const User = require('controllers/user');
-const authenticator = require('middlewares/authentication/');
+const {authenticate} = require('middlewares/authentication/');
 const acl = require('middlewares/roleBased/');
-module.exports = function (express) {
-    // initial an router instance
-    const router = express.Router();
+const {validation, commonValidation} = require('untils/untils');
+const userSchema = require('middlewares/validations/user');
 
-    // POST login
-    router.post('/login', User.login.bind(User));
+// initial an router instance
+const router = express.Router();
 
-    // authenticate for all user request except login.
-    router.use(/^((?!login).)*$/, [authenticator.authenticate, acl.middleware()]);
+// check authentication and role for all routes
+router.all('*', [commonValidation(), authenticate, acl.middleware]);
 
-    // GET Logout
-    router.get('/logout', User.logout.bind(User));
+// GET/ get all
+router.get('/', validation(userSchema), User.getAll);
 
-    // GET/ get all
-    router.get('/', User.getAll.bind(User));
+// POST/ create new user
+router.post('/', validation(userSchema), User.create);
 
-    // POST/ create new user
-    router.post('/', User.create.bind(User));
+// PUT/ update user
+router.put('/', validation(userSchema), User.update);
 
-    router.delete('/:email', User.delete.bind(User));
+// DELETE/:email delete an user by email
+router.delete('/:email', validation(userSchema), User.remove);
 
-    return router;
-};
+module.exports = router;

@@ -17,13 +17,45 @@ redisClient.on('error', (err) => {
 });
 
 module.exports = {
-    set: function (key, value) {
+	set: function (key, value, timeExpire) {
         value = typeof value === 'object' ? JSON.stringify(value) : value;
         redisClient.set(key, value, redis.print);
+		if (timeExpire !== undefined) {
+			this.expire(key, timeExpire, redisClient.print);
+		}
     },
 
     get: function (key) {
         const redisGet = blueBird.promisify(redisClient.get, {context: redisClient});
         return redisGet(key);
-    }
+    },
+
+	hgetall: function (key) {
+		const promiseHgetAll = blueBird.promisify(redisClient.hgetall, {context: redisClient});
+		return promiseHgetAll(key);
+	},
+
+	del: function (key) {
+		return redisClient.del(key);
+	},
+
+	expire: function (userKey, miliseconds) {
+		redisClient.expire(userKey, parseInt(miliseconds) / 1000, redis.print);
+	},
+
+	setUserInfo: function (userKey, user, timeExpire) {
+		user._id = user._id.toString();
+		user = commonHelper.flatObject(user);
+		redisClient.hmset(userKey, user, redis.print);
+		this.expire(userKey, timeExpire);
+	},
+
+	getUserInfo: async function (userKey) {
+		let userInfo = await this.hgetall(userKey);
+		if (userInfo === null) {
+			return null;
+		}
+		userInfo = commonHelper.unFlatObject(userInfo);
+		return userInfo;
+	}
 };

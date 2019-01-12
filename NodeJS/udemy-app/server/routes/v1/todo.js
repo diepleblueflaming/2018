@@ -4,29 +4,33 @@
  *   Created By: Dieple Dev
  *   Initial version created on: 02/06/2018 - 08:37
  */
+const express = require('express');
 const Todo = require('controllers/todo');
-const validator = require('middlewares/validator/todo');
 const cache = require('middlewares/cache/');
-module.exports = function (express) {
-    // initial an router instance
-    const router = express.Router();
+const {authenticate} = require('middlewares/authentication/');
+const acl = require('middlewares/roleBased/');
 
-    // GET get all todo
-    router.get('/', cache.middleware, Todo.getAll);
+// initial an router instance
+const router = express.Router();
 
-    // GET ONE
-    router.get('/:name', Todo.getOne);
+router.all('/', [authenticate, acl.middleware]);
 
-    // POST Todo
-    router.post('/', validator, Todo.create);
+// GET get all todo
+router.get('/', cache.middleware, Todo.getAll.bind(Todo));
 
-    // UPDATE
-    router.put('/', Todo.update);
+// GET ONE
+router.get('/:name', Todo.getOne.bind(Todo));
 
-    // DELETE by Id
-    router.delete('/:id', Todo.deleteById);
+// POST Todo
+router.post('/', Todo.create.bind(Todo));
 
-    // DELETE by Title
-    router.delete('/title/:title', Todo.deleteByTitle);
-    return router;
-};
+// UPDATE
+router.put('/', Todo.update.bind(Todo));
+
+// DELETE by Id
+router.delete('/:id', Todo.deleteById.bind(Todo));
+
+// DELETE by Title
+router.delete('/title/:title', Todo.deleteByTitle.bind(Todo));
+
+module.exports = router;

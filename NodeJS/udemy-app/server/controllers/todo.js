@@ -7,11 +7,22 @@
 // require Todo Model
 const ToDo = require('models/todo');
 const cache = require('middlewares/cache/');
+const {
+	bindDataToResponse,
+	checkDbResponse
+} = require('untils/untils');
+
 module.exports = {
     getAll: async function (req, res, next) {
         try {
-            res.locals.data = await ToDo.get();
-            cache.setCache(req.originalUrl, res.locals.data);
+	        let todos = await ToDo.get();
+	        let responseObj = bindDataToResponse({
+		        res,
+		        data: todos,
+		        msg: 'SUCCESS',
+		        type: 'GET'
+	        });
+	        cache.setCache(req, responseObj);
             next();
         } catch (e) {
             next(e)
@@ -40,8 +51,6 @@ module.exports = {
 
     /**
      * update a todo by id
-     * @param req, res, next
-     * @return {Promise.<void>}
      */
     update: async function (req, res, next) {
         let todo = req.body;
@@ -55,8 +64,6 @@ module.exports = {
 
     /**
      * @description delete toto by id
-     * @param req, res, next
-     * @return {Promise.<void>}
      */
     deleteById: async function (req, res, next) {
         try {
@@ -70,8 +77,6 @@ module.exports = {
 
     /**
      * @description delete todo by title
-     * @param req, res, next
-     * @return {Promise.<void>}
      */
     deleteByTitle: async function (req, res, next) {
         try {
