@@ -12,6 +12,7 @@ import config from './config';
 import app from './core/core';
 import LogRequest from './middlewares/log-request';
 import Authentication from './middlewares/authentication';
+import Log from './lib/Log';
 
 app.initialize({https: true});
 
@@ -30,7 +31,7 @@ app.use({
 app.use({handler: router});
 
 
-/***************** common handler *********************/
+// common handler
 // Resource Not Found
 app.use({
 	handler: function (req, res, next) {
@@ -39,9 +40,20 @@ app.use({
 	}
 });
 
+/******************** Error Handling ****************/
+app.use({
+	handler: function (req, res, next, error) {
+		const log = `Unhandled Rejection\n${error.stack}`;
+		Log.logFile(log);
+		res.body = {statusCode: 500, msg: 'Internal Server Error', data: null};
+		next('end-request');
+	}
+});
+/******************** Error Handling ****************/
+
 // send final response
 app.use({handler: responseParser, name: 'end-request'});
-
+/******************** Define middleware ****************/
 
 
 /********************************** HTTP SERVER *********************************/

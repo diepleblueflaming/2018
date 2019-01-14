@@ -47,6 +47,21 @@ export const deleteProperty = function (object, key) {
 	}, {});
 };
 
+export const getLogFileNameByDate = function () {
+	const now = new Date();
+	const month = String(now.getMonth() + 1).length > 1 ? (now.getMonth() + 1) : `0${(now.getMonth() + 1)}`;
+	const date = String(now.getDate()).length > 1 ? now.getDate() : `0${now.getDate()}`;
+	return `${[now.getFullYear(), month, date].join('_')}`;
+};
+
+/**
+ * handling get prop value from passes object
+ * @param object
+ * @param property
+ * @param defaultValue
+ * @returns {*|string}
+ * @private
+ */
 export function _get(object, property, defaultValue) {
 	const arrayProp = property.split('.');
 	let returnValue = '';
