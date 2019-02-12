@@ -1,16 +1,1 @@
-[
-  {
-    "id": "user-101",
-    "email": "lhdiep95@gmail.com",
-    "address": "Ha Noi",
-    "phone": "012347889549",
-    "password": "123456"
-  },
-  {
-    "id": "user-102",
-    "email": "diep.lehai@gmail.com",
-    "address": "London",
-    "phone": "012347889549",
-    "password": "123456"
-  }
-]
+[{"id":"user-101","email":"lhdiep95@gmail.com","address":"Ha Noi","phone":"012347889549","password":"123456"},{"id":"user-102","address":"London","phone":"012347889549"}]

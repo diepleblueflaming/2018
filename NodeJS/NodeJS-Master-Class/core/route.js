@@ -4,105 +4,126 @@
  * Author: Le Hai Diep(dieple)
  * Date-Time: 22/11/2018-05:36
  */
-import {trimSlash} from "../utils";
+import {trimSlash, isRegex, generateToken} from "../utils";
 import url from "url";
 
-const ParamRegex = /^:(\w+)(\(.+\))?$/;
+export default class Route {
 
-const router = {};
-
-router.layers = [];
-
-router.Router = function (req, res, next) {
-	const realURL = router.parseURL(req, res);
-	const route = router.layers.find((r) => r.regex.test(realURL));
-	if(route) {
-		req.params = router.detectParams(realURL, route.path);
-		route.handler(req, res, next);
-	}else {
-		next();
+	constructor() {
+		this.layers = [];
 	}
-};
 
-router.use = function ({path, handler}) {
-	const pathCopy = path === '' || path === '*' ? '*' : trimSlash(path);
-	const handlerCopy = typeof handler === 'function' ? handler : function(){};
-	router.layers.push({path: pathCopy, handler: handlerCopy});
-};
-
-
-router.get = function () {
-	const {path, handler, regex} = router.parseParams(arguments, 'GET');
-	router.layers.push({path, handler, regex});
-};
-
-router.post = function () {
-	const {path, handler, regex} = router.parseParams(arguments, 'POST');
-	router.layers.push({path, handler, regex});
-};
-
-router.put = function () {
-	const {path, handler,regex} = router.parseParams(arguments, 'PUT');
-	router.layers.push({path, handler, regex});
-};
-
-router.delete = function () {
-	const {path, handler, regex} = router.parseParams(arguments, 'DELETE');
-	router.layers.push({path, handler, regex});
-};
-
-router.all = function () {
-	const {path, handler, regex} = router.parseParams(arguments, '(\\w*)');
-	router.layers.push({path, handler, regex});
-};
-
-router.parseParams = function(args, httpMethod) {
-	const params = Array.from(args);
-	const path = params.length === 2 && typeof params[0] === 'string' && params[0] ? params[0] : '';
-	const regex = params.length === 2 && typeof params[0] === 'string' && params[0] ?
-							 router.parserRoute(params[0], httpMethod) : /^(.*)$/;
-	const handler = (params.length === 1 && typeof params[0] === 'function') ||
-									(params.length === 2 && typeof params[1] === 'function') ?
-									(params[1] || params[0]) : null;
-	if(!handler) {
-		throw new Error('Handler must be a function !');
-	}
-	return {path, regex, handler};
-};
-
-router.parseURL = function (req, res) {
-	const parseURL = url.parse(req.url);
-	const trimmedPath = trimSlash(parseURL.path);
-	const httpMethod = req.method.toLowerCase();
-	return `${httpMethod.toUpperCase()}/${trimmedPath}`;
-};
-
-router.parserRoute = function (route, httpMethod) {
-	const trimmedRoute = trimSlash(route);
-	const arrRoute = trimmedRoute.split('/');
-	const arrRouteTransformed = arrRoute.map((piece) => {
-		const arrMatch = piece.match(ParamRegex);
-		return arrMatch && Array.isArray(arrMatch)  ? (arrMatch[2] || '(.+)') : piece;
-	});
-	const strRoute = arrRouteTransformed.join('/');
-	const strTmp = `^${httpMethod}/${strRoute}$`;
-	return new RegExp(strTmp);
-};
-
-
-router.detectParams = function (realURL, route) {
-	const params = {};
-	const arrRealURL = realURL.split('/');
-	const arrRoute = route.split('/');
-
-	arrRoute.forEach((piece, index) => {
-		const arrMatch = piece.match(ParamRegex);
-		if(arrMatch && Array.isArray(arrMatch)) {
-			const paramName = arrMatch[1];
-			params[paramName] = arrRealURL[index];
+	use() {
+		const object = this.parseParams(arguments, '(\\w*)');
+		if (typeof object.handler === 'function') {
+			this.layers.push(object);
+		} else if (object.handler instanceof Route) {
+			// current solution: merge all item of sublayer into parent layer
+			object.handler.layers[0].previousId = object.previousId;
+			object.handler.layers.forEach((item) => {
+				item.path = object.path + item.path;
+				this.layers.push(item);
+			});
 		}
-	});
-	return params;
-};
+	}
 
-export default router;
+	get() {
+		this.layers.push(this.parseParams(arguments, 'GET'));
+	}
+
+	post() {
+		this.layers.push(this.parseParams(arguments, 'POST'));
+	}
+
+	put() {
+		this.layers.push(this.parseParams(arguments, 'PUT'));
+	}
+
+	delete() {
+		this.layers.push(this.parseParams(arguments, 'DELETE'));
+	}
+
+	all() {
+		this.layers.push(this.parseParams(arguments, '(\\w*)'));
+	}
+
+	parseParams(args, httpMethod) {
+		const params = Array.from(args);
+		let path = /^(.*)$/,
+			handler = null,
+			// regex = /^(.*)$/,
+			name = '';
+
+		// if arguments'length = 1
+		if (params.length === 1) {
+			if (!Route.isValidHandler(params[0])) {
+				throw new Error('Parameters is invalid');
+			}
+			handler = params[0];
+		}
+		// if arguments'length = 2
+		if (params.length === 2) {
+			if (Route.isValidPath(params[0]) && Route.isValidHandler(params[1])) {
+				path = params[0];
+				// regex = isRegex(params[0]) ? params[0] : this.convertStringToRegex(params[0], httpMethod);
+				handler = params[1];
+			} else if (Route.isValidHandler(params[0]) && Route.isValidName(params[1])) {
+				handler = params[0];
+				name = params[1];
+			} else {
+				throw new Error('Parameters is invalid');
+			}
+		}
+		// if arguments'length = 3
+		if (params.length === 3) {
+			if (
+				Route.isValidPath(params[0]) &&
+				Route.isValidHandler(params[1]) &&
+				Route.isValidName(params[2])
+			) {
+				path = params[0];
+				// regex = isRegex(params[0]) ? params[0] : this.convertStringToRegex(params[0], httpMethod);
+				handler = params[1];
+				name = params[2];
+			} else {
+				throw new Error('Parameters is invalid');
+			}
+		}
+		const id = generateToken(5);
+		const previousId = this.findPreviousFncId(this.layers);
+		return {id, previousId, path, name, handler, httpMethod};
+	}
+
+	static parseURL(req, res) {
+		const parseURL = url.parse(req.url);
+		const trimmedPath = trimSlash(parseURL.path);
+		const httpMethod = req.method.toLowerCase();
+		return `${httpMethod.toUpperCase()}/${trimmedPath}`;
+	};
+
+	findPreviousFncId(layers) {
+		let result = '';
+		let i = 0;
+		for (i; i < layers.length; i++) {
+			if (typeof layers[i].handler === 'function') {
+				result = layers[i].id;
+			}
+			else if (Array.isArray(layers[i].handler)) {
+				result = this.findPreviousFncId(layers[i].handler);
+			}
+		}
+		return result;
+	}
+
+	static isValidPath(path) {
+		return typeof path === 'string' || isRegex(path);
+	}
+
+	static isValidHandler(handler) {
+		return typeof handler === 'function' || handler instanceof Route;
+	}
+
+	static isValidName(name) {
+		return typeof name === 'string';
+	}
+}

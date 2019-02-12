@@ -24,8 +24,8 @@ export const trimSlash = function (string) {
  * generate random string
  * @returns {string}
  */
-export const generateToken = function() {
-	return String(crypto.randomBytes(20).toString('hex').slice(0, TOKEN_LENGTH));
+export const generateToken = function(tokenLength = TOKEN_LENGTH) {
+	return String(crypto.randomBytes(20).toString('hex').slice(0, tokenLength));
 };
 
 /**
@@ -72,4 +72,12 @@ export function _get(object, property, defaultValue) {
 		returnValue = defaultValue;
 	}
 	return (returnValue === undefined && defaultValue) ? defaultValue : returnValue;
+}
+
+export function isRegex(obj) {
+	return Object.prototype.toString.call(obj) === '[object RegExp]';
+}
+
+export function genRandomString(length) {
+
 }

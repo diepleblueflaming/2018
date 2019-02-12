@@ -6,7 +6,7 @@
 
 // all dependencies
 import {bodyParser} from './middlewares/bodyPaser';
-import router from './router';
+import router from './router/api';
 import responseParser from './middlewares/responseParser';
 import config from './config';
 import app from './core/core';
@@ -18,41 +18,35 @@ app.initialize({https: true});
 
 /******************** Define middleware ****************/
 // log request
-app.use({handler: LogRequest});
+app.use(LogRequest);
 
 // body parser
-app.use({handler: bodyParser});
+app.use(bodyParser);
 // authentication middleware
-app.use({
-	path: '^(?!(login|register)).*$',
-	handler: Authentication
-});
-// router
-app.use({handler: router});
+app.use(/^.*\/(?!(login|register)).*$/, Authentication);
+
+// api router
+app.use('/api', router);
 
 
 // common handler
 // Resource Not Found
-app.use({
-	handler: function (req, res, next) {
+app.use(function (req, res, next) {
 		res.body = {statusCode: 404, msg: 'Resource Not Found'};
 		next('end-request');
-	}
 });
 
 /******************** Error Handling ****************/
-app.use({
-	handler: function (req, res, next, error) {
+app.use(function (req, res, next, error) {
 		const log = `Unhandled Rejection\n${error.stack}`;
 		Log.logFile(log);
 		res.body = {statusCode: 500, msg: 'Internal Server Error', data: null};
 		next('end-request');
-	}
 });
 /******************** Error Handling ****************/
 
 // send final response
-app.use({handler: responseParser, name: 'end-request'});
+app.use(responseParser, 'end-request');
 /******************** Define middleware ****************/
 
 
