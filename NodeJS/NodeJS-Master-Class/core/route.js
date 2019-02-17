@@ -49,7 +49,7 @@ export default class Route {
 
 	parseParams(args, httpMethod) {
 		const params = Array.from(args);
-		let path = /^(.*)$/,
+		let path = '(.*)',
 			handler = null,
 			// regex = /^(.*)$/,
 			name = '';
@@ -64,7 +64,7 @@ export default class Route {
 		// if arguments'length = 2
 		if (params.length === 2) {
 			if (Route.isValidPath(params[0]) && Route.isValidHandler(params[1])) {
-				path = params[0];
+					path = params[0];
 				// regex = isRegex(params[0]) ? params[0] : this.convertStringToRegex(params[0], httpMethod);
 				handler = params[1];
 			} else if (Route.isValidHandler(params[0]) && Route.isValidName(params[1])) {
@@ -81,7 +81,7 @@ export default class Route {
 				Route.isValidHandler(params[1]) &&
 				Route.isValidName(params[2])
 			) {
-				path = params[0];
+					path = params[0];
 				// regex = isRegex(params[0]) ? params[0] : this.convertStringToRegex(params[0], httpMethod);
 				handler = params[1];
 				name = params[2];

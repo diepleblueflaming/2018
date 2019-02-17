@@ -11,6 +11,9 @@ export default function (req, res, next) {
 		message: msg,
 		data
 	};
-	res.writeHead(statusCode, {'Content-Type': 'application/json'});
+	res.writeHead(statusCode, {
+		'Access-Control-Allow-Origin': '*',
+		'Content-Type': 'application/json; charset=UTF-8'
+	});
 	res.end(JSON.stringify(resObj));
 };

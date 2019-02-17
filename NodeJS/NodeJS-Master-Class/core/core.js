@@ -100,9 +100,10 @@ core.createHttpsServer = function () {
 	});
 };
 
-core.terminateServer = function () {
+core.terminateServer = function (req, res) {
 	console.log('Ca\'t find next middleware');
-	process.exit(1);
+	res.writeHead(404);
+	res.end();
 };
 
 core.findRunFunction = function (layers, userPath, handlerName, middlewareIndex) {
@@ -163,7 +164,7 @@ core.detectParams = function(realURL, route) {
 
 core.addHTTPMethodPrefix = function (route, httpMethod) {
 	if(httpMethod) {
-		const replaced = trimSlash(String(route).replace('^', `^${httpMethod.toUpperCase()}\\\/`));
+		const replaced = trimSlash(String(route)).replace('^', `^${httpMethod.toUpperCase()}\\\/`);
 		return new RegExp(replaced);
 	}
 	return route;

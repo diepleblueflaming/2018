@@ -1,0 +1,27 @@
+<!--
+* Project: NodeJS-Master-Class
+* Author: Le Hai Diep(dieple)
+* Date-Time: 12/02/2019-21:55
+*-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=0.8">
+	<title>@{data.title}</title>
+	<link rel="stylesheet" href="public/css/app.css">
+	<script type="text/javascript" src="public/js/app.js"></script>
+</head>
+<body>
+	<div class="app">
+		<div class="main-wrapper">
+			<div class="header">
+				@include(layout/header)
+			</div>
+			<div class="main-content">
+				@{content}
+			</div>
+		</div>
+	</div>
+</body>
+</html>

@@ -6,6 +6,7 @@
  */
 
 import {StringDecoder} from 'string_decoder';
+import {parse} from 'querystring';
 
 const decoder = new StringDecoder('utf-8');
 
@@ -22,12 +23,14 @@ export function bodyParser(req, res, next) {
 					req.body = buffer && JSON.parse(buffer);
 					break;
 				}
-
 				case 'text/html': {
 					req.body = buffer;
 					break;
 				}
-
+				case 'application/x-www-form-urlencoded': {
+					req.body = parse(buffer);
+					break;
+				}
 				default : {
 					req.body = null;
 				}

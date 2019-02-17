@@ -1,0 +1,42 @@
+<!--
+* Project: NodeJS-Master-Class
+* Author: Le Hai Diep(dieple)
+* Date-Time: 13/02/2019-05:54
+*-->
+<div class="users">
+
+</div>
+
+<script type="application/javascript" >
+	(async () => {
+		const users = await User.getUsers();
+
+		if(users && Array.isArray(users.data)) {
+			const container = document.getElementsByClassName('users')[0];
+			container.innerHTML = renderUser(users.data);
+		}
+
+		function renderUser(users) {
+			let html = '<table>';
+			html += '<tr><th>Id</th><th>Email</th><th>Address</th><th>Phone</th><th>Password</th></tr>';
+
+			users.forEach((user) => {
+				html += `<tr><td>${user.id}</td><td>${user.email}</td><td>${user.address}</td>`;
+				html += `<td>${user.phone}</td><td>${user.password}</td></tr>`;
+			});
+
+			html += '</table>';
+			return html;
+		}
+	})();
+</script>
+<style>
+	.users {
+		height: 100%;
+		display: flex;
+		justify-content: center;
+		padding-top: 30px;
+	}
+
+
+</style>

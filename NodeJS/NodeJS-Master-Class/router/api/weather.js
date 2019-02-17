@@ -11,6 +11,6 @@ import Weather from '../../controllers/Weather';
 const router = new Route();
 
 // weather module route
-router.get('/:cityname', Weather.get);
+router.get('/:cityname(\\w+)', Weather.get);
 
 export default router;

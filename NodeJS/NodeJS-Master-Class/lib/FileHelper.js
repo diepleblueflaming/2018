@@ -18,7 +18,7 @@ FileHelper.createDir = async function (path) {
 	try {
 		await fsPromise.mkdir(path, {
 			recursive: true
-		})
+		});
 	} catch (e) {
 		this.onError(e);
 	}
@@ -52,19 +52,17 @@ FileHelper.writeFile = async function (pathToFile, data) {
 };
 
 FileHelper.isExistDirectory = async function (path) {
-	let result;
 	try {
 		await fsPromise.realpath(path);
-		result = true;
+		return true;
 	} catch (e) {
-		result = false
+		return false;
 	}
-	return result;
 };
 
 FileHelper.removeFile = async function (path) {
 	try {
-		await fsPromise.unlink(path)
+		await fsPromise.unlink(path);
 	} catch (e) {
 		this.onError(e);
 	}
@@ -90,13 +88,31 @@ FileHelper.onError = function (e) {
 };
 
 FileHelper.isJson = function (str) {
-	let result = true;
 	try {
 		JSON.parse(str);
-		result = true;
+		return true;
 	} catch (e) {
-		result = false;
+		return false;
 	}
-	return typeof str === 'string' && result;
+};
+
+FileHelper.readHTMLFile = async function (path) {
+	try {
+		let content = await fsPromise.readFile(path, 'utf8');
+		// remove all comment in file
+		content = content.replace(/(?=<!--)([\s\S]*?)-->/g, '');
+		return content;
+	}catch (e) {
+		return '';
+	}
+};
+
+FileHelper.readStaticResource = async function (resourcePath) {
+	try {
+		const data = await fsPromise.readFile(resourcePath);
+		return data;
+	}catch (e) {
+		return null;
+	}
 };
 export default FileHelper;

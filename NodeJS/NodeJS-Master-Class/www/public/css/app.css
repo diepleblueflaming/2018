@@ -1,0 +1,152 @@
+/**
+* Project: NodeJS-Master-Class
+* Author: Le Hai Diep(dieple)
+* Date-Time: 13/02/2019-22:46
+*/
+html, h1, h2, h3, ul, li {
+	padding: 0;
+	margin: 0;
+}
+body {
+	margin: 0;
+	padding: 0;
+	font-family: sans-serif;
+}
+.app {
+	margin: 0;
+	padding: 0;
+	background-color: #fff1;
+	height: 100vh;
+	position: relative;
+}
+
+.app a {
+	text-decoration: none;
+}
+.app .header .header-inner{
+	padding: 10px 5px;
+	box-sizing: border-box;
+	background-color: #60ce9b;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.app .header .caption {
+	color: #f7eee8;
+	font-size: 1.2em;
+}
+
+.app .header .icon {
+	width: 50px;
+	height: 50px;
+	border-radius: 50%;
+}
+.app .header .icon img {
+	border-radius: 50%;
+}
+
+.app .main-content {
+	height: calc(100vh - 90px);
+}
+
+/*index page*/
+	.main-content .home-page {
+		height: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+	.home-page .login-btn {
+		border: none;
+		padding: 20px 60px;
+		font-size: 16px;
+		font-weight: bold;
+		background-color: #60ce9b;
+		color: #ffffff;
+		border-radius: 30px;
+		transition: all 0.3s ease-in-out;
+		cursor: pointer;
+	}
+	.home-page .login-btn:hover {
+		background-color: #ffffff;
+		color: #60ce9b;
+		border: 1px solid #60ce9b;
+	}
+/*index page*/
+.app .footer {
+	color: #ffffff;
+	display: flex;
+	justify-content: center;
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	padding: 15px 0;
+	background-color: #60ce9b;
+}
+
+.app .btn {
+	font-size: 15px;
+	padding: 7px 30px;
+	background-color: #60ce9b;
+	border-radius: 15px;
+	border: 1px solid transparent;
+	color: white;
+	transition: all 0.3s ease-in-out;
+	cursor: pointer;
+	font-weight: bold;
+}
+.app .btn:hover {
+	background-color: white;
+	color: #60ce9b;
+	border: 1px solid #60ce9b;
+}
+.app .input {
+	display: block;
+	width: 100%;
+	height: calc(2.25rem + 2px);
+	padding: .375rem .75rem;
+	font-size: 1rem;
+	line-height: 1.5;
+	color: #495057;
+	background-color: #fff;
+	background-clip: padding-box;
+	border: 1px solid #ced4da;
+	border-radius: .25rem;
+	transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+	box-sizing: border-box;
+}
+
+.app .input {
+	outline: none;
+}
+
+.app .label {
+	font-size: 16px;
+	padding: 10px 0;
+}
+
+.app .error {
+	font-size: 13px;
+	margin-top: 10px;
+	color: red;
+}
+
+.app table {
+	border: 1px solid #60ce9b;
+	border-radius: 5px;
+	border-spacing: 0;
+}
+
+.app tr th {
+	background-color: #60ce9b;
+	color: white;
+}
+.app table tr:nth-last-of-type(odd){
+	border-bottom: 1px solid #ccc;
+}
+
+.app table td, .app table th {
+	text-align: center;
+	padding: 10px 15px;
+}

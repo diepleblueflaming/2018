@@ -88,7 +88,7 @@ LogRequest.logToFile = function () {
 		LogRequest._uri + ' ',
 		LogRequest._status + ' ',
 		requestTime,
-		'\n' + JSON.stringify(LogRequest._responseContent)
+		'\n' + (LogRequest._responseContent ? JSON.stringify(LogRequest._responseContent) : 'RawHTML')
 	].join('');
 	Log.logFile(log);
 };
