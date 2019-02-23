@@ -9,7 +9,6 @@ import Route from '../../core/route';
 import Authentication from '../../controllers/Authentication';
 import User from '../../controllers/User';
 import weather from './weather';
-import Log from "../../lib/Log";
 import responseParser from "../../middlewares/responseParser";
 
 const router = new Route();

@@ -3,40 +3,177 @@
 * Author: Le Hai Diep(dieple)
 * Date-Time: 13/02/2019-05:54
 *-->
-<div class="users">
-
+<div class="users" id="list-user"></div>
+<div class="user-setting hide" id="user-setting">
+	<div class="form-wrapper">
+		<div class="title">Add New User</div>
+		<form>
+			<div class="input-wrapper">
+				<div class="label">
+					<label for="id">Id</label>
+				</div>
+				<input type="text" name="id" id="id" class="input id" placeholder="Id" autocomplete="new-id">
+			</div>
+			<div class="input-wrapper">
+				<div class="label">
+					<label for="email">Email</label>
+				</div>
+				<input type="text" name="email" id="email" class="input email" placeholder="Email" autocomplete="new-email">
+			</div>
+			<div class="input-wrapper">
+				<div class="label">
+					<label for="password">Password</label>
+				</div>
+				<input type="password" name="password" id="password" class="input password" autocomplete="new-password">
+			</div>
+			<div class="input-wrapper">
+				<div class="label">
+					<label for="address">Address</label>
+				</div>
+				<input type="text" name="address" id="address" class="input address" autocomplete="new-address">
+			</div>
+			<div class="input-wrapper">
+				<div class="label">
+					<label for="phone">Phone</label>
+				</div>
+				<input type="tel" name="phone" id="phone" class="input phone" autocomplete="new-phone">
+			</div>
+			<div class="btn-area">
+				<div class="input-wrapper">
+					<button type="button" class="btn btn-submit">Submit</button>
+				</div>
+			</div>
+		</form>
+	</div>
 </div>
 
-<script type="application/javascript" >
+<script type="application/javascript">
 	(async () => {
-		const users = await User.getUsers();
+		const response = await User.getUsers();
+		let users = response.data;
+		init();
 
-		if(users && Array.isArray(users.data)) {
+		/** Declare function **/
+		function init() {
+			if (users && Array.isArray(users)) {
+				updateUserView();
+			}
+		}
+
+
+		function updateUserView() {
 			const container = document.getElementsByClassName('users')[0];
-			container.innerHTML = renderUser(users.data);
+			container.innerHTML = renderUser(users);
+			bindingEvents();
 		}
 
 		function renderUser(users) {
 			let html = '<table>';
-			html += '<tr><th>Id</th><th>Email</th><th>Address</th><th>Phone</th><th>Password</th></tr>';
+			html += '<tr><th>Id</th><th>Email</th><th>Address</th><th>Phone</th><th>Password</th>';
+			html += '<th>Edit</th><th>Delete</th></tr>';
 
 			users.forEach((user) => {
-				html += `<tr><td>${user.id}</td><td>${user.email}</td><td>${user.address}</td>`;
-				html += `<td>${user.phone}</td><td>${user.password}</td></tr>`;
+				html += '<tr>';
+				html += `<td>${user.id}</td><td>${user.email}</td><td>${user.address}</td>`;
+				html += `<td>${user.phone}</td><td>${user.password}</td>`;
+				html += `<td><div class="btn btn-table btn-edit" data-id="${user.id}">Edit</div></td>`;
+				html += `<td><div class="btn btn-table btn-delete" data-id="${user.id}">Delete</div></td>`;
+				html += '</tr>';
 			});
 
 			html += '</table>';
 			return html;
 		}
+
+		function deleteUser(userId) {
+			User.delete(userId).then((response) => {
+				if (Array.isArray(users)) {
+					users = users.filter(user => user.id !== userId);
+					updateUserView();
+				}
+			});
+		}
+
+		/** Declare function **/
+
+		/** Binding Events **/
+		function bindingEvents() {
+			// get all common DOM
+			const lisUserDOM = document.getElementById('list-user');
+			const settingUserDOM = document.getElementById('user-setting');
+			const titleDOM = settingUserDOM.querySelector('.title');
+			const btnSubmit = settingUserDOM.querySelector('.btn-submit');
+
+			// binding click event to delete btn
+			bindingEventToClass('btn-delete', function () {
+				const userId = this.getAttribute('data-id');
+				deleteUser(userId);
+			});
+
+			// binding click event to edit btn
+			bindingEventToClass('btn-edit', function () {
+				const userId = this.getAttribute('data-id');
+
+				// get user info
+				const userInfo = users.find(user => user.id === userId);
+				bindingDataToForm(userInfo);
+
+				// change title
+				titleDOM.innerHTML = 'Edit User';
+				btnSubmit.classList.add('edit');
+				btnSubmit.classList.remove('add');
+				lisUserDOM.classList.add('hide');
+				settingUserDOM.classList.remove('hide');
+			});
+
+			// binding click event to submit btn
+			btnSubmit.addEventListener('click', function (event) {
+				const isEditBtn = this.classList.contains('edit');
+				const user = getUserFromForm();
+
+				if(isEditBtn) {
+					User.update(user).
+					then((res) => {
+						if (Array.isArray(users)) {
+							const index = users.findIndex(u => u.id === user.id);
+							users[index] = user;
+							updateUserView();
+							lisUserDOM.classList.remove('hide');
+							settingUserDOM.classList.add('hide');
+						}
+					});
+				}
+			});
+
+			function bindingDataToForm(user) {
+				const listInput = Array.from(settingUserDOM.getElementsByTagName('input'));
+				listInput.forEach((input) => {
+					const inputName = input.getAttribute('name');
+					input.value = user[inputName] || '';
+					if(inputName === 'id') {
+						input.setAttribute('disabled','disabled');
+					}
+				});
+			}
+
+			function getUserFromForm(userId) {
+				const user = {id: userId};
+				const listInput = Array.from(settingUserDOM.getElementsByTagName('input'));
+				listInput.forEach((input) => {
+					const inputName = input.getAttribute('name');
+					user[inputName] = input.value;
+				});
+				return user;
+			}
+
+			function bindingEventToClass(className, callback, event = 'click') {
+				let btns = document.getElementsByClassName(className);
+				btns = btns ? Array.from(btns) : [];
+				btns.forEach(btn => {
+					btn.addEventListener(event, callback);
+				});
+			}
+		}
+		/** Binding Events **/
 	})();
 </script>
-<style>
-	.users {
-		height: 100%;
-		display: flex;
-		justify-content: center;
-		padding-top: 30px;
-	}
-
-
-</style>

@@ -47,7 +47,7 @@ body {
 }
 
 .app .main-content {
-	height: calc(100vh - 90px);
+	height: calc(100vh - 100px);
 }
 
 /*index page*/
@@ -74,6 +74,23 @@ body {
 		border: 1px solid #60ce9b;
 	}
 /*index page*/
+
+
+/*user page*/
+.app .main-content .users, .app .main-content .user-setting, .app .main-content .login {
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	padding-top: 30px;
+}
+.app .user-setting .btn-area {
+	justify-content: flex-end !important;
+}
+.app .hide {
+	display: none !important;
+}
+/*user page*/
+
 .app .footer {
 	color: #ffffff;
 	display: flex;
@@ -100,6 +117,23 @@ body {
 	background-color: white;
 	color: #60ce9b;
 	border: 1px solid #60ce9b;
+}
+.app .btn-table {
+	padding: 5px 20px;
+}
+.app .btn-delete {
+	background-color: red;
+}
+.app .btn-delete:hover {
+	color: red !important;
+	border: 1px solid red !important;
+}
+.app .btn-edit {
+	background-color: #1434ff;
+}
+.app .btn-edit:hover {
+	color: #1434ff !important;
+	border: 1px solid #1434ff !important;
 }
 .app .input {
 	display: block;
@@ -145,8 +179,47 @@ body {
 .app table tr:nth-last-of-type(odd){
 	border-bottom: 1px solid #ccc;
 }
-
-.app table td, .app table th {
+.app table th {
+	text-align: center;
+	padding: 15px;
+}
+.app table td{
 	text-align: center;
 	padding: 10px 15px;
 }
+
+
+/*common form style*/
+.app .form-wrapper {
+	width: 450px;
+	border: 1px solid #60ce9b;
+	border-radius: 5px;
+	padding: 60px 15px 30px 15px;
+	position: relative;
+	height: max-content;
+}
+.app .input-wrapper {
+	margin: 10px 0;
+}
+.app .btn-area {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+}
+.app .form-wrapper .title {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	height: 60px;
+	background-color: #1BD99A;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 25px;
+	color: white;
+	font-weight: bold;
+	font-family: fantasy;
+}
+/*common form style*/

@@ -25,7 +25,7 @@ authentication.login = async function (req, res, next) {
 	const users = await FileHelper.readFile(pathUserFile, {jsonMode: true});
 	const isValidUser = users.find(user => user.email === email && user.password === password);
 
-	if(isValidUser) {
+	if (isValidUser) {
 		const token = generateToken();
 		res.setHeader('x-auth', token);
 		res.body = {statusCode: 200, msg: 'Login successfully !'};
@@ -49,7 +49,7 @@ authentication.logout = async function(req, res, next) {
 		await Storage.setItem('token', newTokens);
 		res.body = {statusCode: 200, msg: 'Logout successfully'};
 	}else {
-		res.body = {statusCode: 500, msg: 'Internal server error !'}
+		res.body = {statusCode: 500, msg: 'Internal server error !'};
 	}
 	next('end-request');
 };

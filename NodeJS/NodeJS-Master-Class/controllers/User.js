@@ -6,6 +6,7 @@
  */
 const User = {};
 import FileHelper from '../lib/FileHelper';
+import Performance from '../lib/PerformanceHelper';
 
 const pathUserFile = 'data/users.json';
 
@@ -26,9 +27,13 @@ User.get = async function (req, res, next) {
 User.add = async function (req, res, next) {
 	try {
 		const user = req.body;
-		let users = await FileHelper.readFile(pathUserFile, {jsonMode: true});
+		let users = await Performance.measure('Read user from file', () =>
+			FileHelper.readFile(pathUserFile, {jsonMode: true})
+		);
 		users.push(user);
-		await FileHelper.writeFile(pathUserFile, users);
+		await Performance.measure('Write users to file', () =>
+			FileHelper.writeFile(pathUserFile, users)
+		);
 		res.body = {statusCode: 200, msg: 'successfully', data: user};
 	} catch (e) {
 		console.log(e);
@@ -41,9 +46,14 @@ User.delete = async function (req, res, next) {
 	try {
 		const userId = req.params.id;
 		const users = await FileHelper.readFile(pathUserFile, {jsonMode: true});
-		const newUsers = users.filter(user => user.id !== userId);
-		await FileHelper.writeFile(pathUserFile, newUsers);
-		res.body = {statusCode: 200, msg: 'The user is deleted !'};
+		const isExistedUser = users.find(user => user.id === userId);
+		if (isExistedUser) {
+			const newUsers = users.filter(user => user.id !== userId);
+			await FileHelper.writeFile(pathUserFile, newUsers);
+			res.body = {statusCode: 200, msg: 'The user is deleted !'};
+		}else {
+			res.body = {statusCode: 500, msg: 'Can\' delete this user!'};
+		}
 	} catch (e) {
 		res.body = {statusCode: 500, msg: 'Can\' delete this user!'};
 	}

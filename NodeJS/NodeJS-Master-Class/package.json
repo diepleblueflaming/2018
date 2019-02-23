@@ -6,7 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "NODE_ENV=staging nodemon --inspect --exec  babel-node app.js ",
-    "dev": "NODE_ENV=staging babel-node app.js "
+    "dev": "NODE_ENV=staging babel-node app.js ",
+    "debug_performance": "NODE_DEBUG=performance babel-node app.js ",
+    "debug_process": "NODE_DEBUG=process babel-node app.js "
   },
   "keywords": [],
   "author": "",
